@@ -3,12 +3,12 @@ package com.dao.jdbc;
 import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
-import com.dao.memory.FilmMemoryDAO;
+
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -26,7 +26,7 @@ public class JDBCDAOFactory implements FactoryDAO {
         return instance;
     }
 
-    private JDBCDAOFactory(){
+    private JDBCDAOFactory() {
 
     }
 
