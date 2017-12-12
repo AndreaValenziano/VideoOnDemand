@@ -4,11 +4,12 @@ import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
 import com.dao.dto.FilmDTO;
+import com.facade.FacadeService;
+import com.facade.FacadeServiceImpl;
 import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 import com.videoondemand.utils.CustomTags;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -78,16 +79,17 @@ public class UpdateFilmServlet extends HttpServlet {
         }
 
         if (errors.isEmpty()) {
-            FilmDAO filmDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getFilmDAO();
-            GenreDAO genreDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getGenreDAO();
-            FilmDTO filmDTO = filmDAO.findById(id);
+            FacadeService facadeService = FacadeServiceImpl.getInstance();
+            FilmDTO filmDTO = new FilmDTO();
+            filmDTO.id=id;
+            filmDTO.title=title;
+            filmDTO.releaseYear=year;
+            filmDTO.genreId=reqGender;
 
-            Film film = new Film(title, reqGender, year );
-            film.setId(id);
-            request.setAttribute(CustomTags.FILM, film);
-            filmDTO.setFilm(film);
-            filmDTO.setGenre(genreDAO.findById(reqGender));
-            filmDAO.update(filmDTO);
+
+            filmDTO.setGenre(facadeService.getGenres().get(reqGender-1));
+            facadeService.update(filmDTO);
+
             try {
                 request.getRequestDispatcher("FilmListServlet").forward(request,response);
             } catch (IOException e) {
@@ -117,22 +119,22 @@ public class UpdateFilmServlet extends HttpServlet {
                 id = 0;
             }
             Film film;
-
-            FilmDAO filmDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getFilmDAO();
+            FacadeService facadeService = FacadeServiceImpl.getInstance();
             try {
 
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 System.out.println("Film Not Found");
             }
-            film = filmDAO.findById(id).getFilm();
-
+            film = facadeService.findById(id).getFilm();
 
             request.setAttribute(CustomTags.FILM, film);
 
         }
-        GenreDAO genreDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getGenreDAO();
-        genres = genreDAO.findAll();
+
+        FacadeService facadeService = FacadeServiceImpl.getInstance();
+        genres = facadeService.getGenres();
+
         request.setAttribute(CustomTags.GENRES, genres);
         request.setAttribute(CustomTags.ID, id);
         request.getRequestDispatcher("UpdateFilm.jsp").forward(request, response);

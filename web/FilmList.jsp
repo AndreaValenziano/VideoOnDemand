@@ -49,15 +49,15 @@
                                     }
                         %>
                         <tr class="<%= trClass %>">
-                            <td><%= film.getFilm().getTitle() %>
+                            <td><%= film.title %>
                             </td>
                             <td><%= film.getGenre().getName() %> <!--TODO: gestire il genere nella tabella -->
                             </td>
-                            <td><%= film.getFilm().getReleaseYear() %>
+                            <td><%= film.releaseYear %>
                             </td>
-                            <td style="text-align: center;"><a class="btn" href="UpdateFilm?id=<%= film.getFilm().getId() %>"><i class="fa fa-pencil-square-o"
+                            <td style="text-align: center;"><a class="btn" href="UpdateFilm?id=<%= film.id %>"><i class="fa fa-pencil-square-o"
                                                                                        aria-hidden="true"></i></a>
-                                <a class="btn" href="DeleteFilm?id=<%= film.getFilm().getId() %>"><i
+                                <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
                                         class="fa fa-trash"
                                         aria-hidden="true"></i></a></td>
                         </tr>

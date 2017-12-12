@@ -10,10 +10,10 @@ import java.util.List;
  */
 public interface  FilmDAO {
 
-    void insert(FilmDTO film);
-    void update(FilmDTO film);
-    void delete(FilmDTO film);
-    FilmDTO findById(int id);
-    List<FilmDTO> findAll();
+    void insert(Film film);
+    void update(Film film);
+    void delete(Film film);
+    Film findById(int id);
+    List<Film> findAll();
 
 }

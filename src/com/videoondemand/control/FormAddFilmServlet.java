@@ -4,12 +4,12 @@ import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
 import com.dao.dto.FilmDTO;
-import com.dao.memory.FilmMemoryDAO;
+import com.facade.FacadeService;
+import com.facade.FacadeServiceImpl;
 import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 import com.videoondemand.utils.CustomTags;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.json.*;
 
 /**
  * Created by AndreaValenziano on 28/11/17.
@@ -34,10 +33,10 @@ public class FormAddFilmServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         List<String> errors = new ArrayList<>();
-        HashMap<String,String> defaultFilm = new HashMap<>();
-        defaultFilm.put("title","");
-        defaultFilm.put("gender","");
-        defaultFilm.put("year","");
+        HashMap<String, String> defaultFilm = new HashMap<>();
+        defaultFilm.put("title", "");
+        defaultFilm.put("gender", "");
+        defaultFilm.put("year", "");
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
@@ -47,12 +46,12 @@ public class FormAddFilmServlet extends HttpServlet {
 
         String yearStr = request.getParameter("year");
         yearStr = yearStr != null ? yearStr.trim() : "";
-        int year=-1;
+        int year = -1;
         int reqGender;
 
-        try{
+        try {
             reqGender = Integer.parseInt(request.getParameter("genre"));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             reqGender = 0;
         }
@@ -60,8 +59,8 @@ public class FormAddFilmServlet extends HttpServlet {
 
         try {
             year = Integer.parseInt(yearStr);
-            if (year<1920 || year>LocalDate.now().getYear()) {
-                errors.add(YEAR_RANGE_ERROR+LocalDate.now().getYear());
+            if (year < 1920 || year > LocalDate.now().getYear()) {
+                errors.add(YEAR_RANGE_ERROR + LocalDate.now().getYear());
             }
         } catch (NumberFormatException e) {
             errors.add(YEAR_ERROR);
@@ -75,39 +74,38 @@ public class FormAddFilmServlet extends HttpServlet {
 
         if (errors.isEmpty()) {
 
-            Film film = new Film(title, reqGender, year);
-            FilmDTO filmDTO = new FilmDTO(film);
 
-            request.setAttribute(CustomTags.FILM,film);
-            FilmDAO filmDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getFilmDAO();
-            filmDAO.insert(filmDTO);
+            FacadeService facadeService = FacadeServiceImpl.getInstance();
+            FilmDTO filmDTO = new FilmDTO();
+            filmDTO.title = title;
+            filmDTO.releaseYear = year;
+            filmDTO.genreId = reqGender;
+            facadeService.insert(filmDTO);
+
             try {
                 response.sendRedirect("FilmListServlet");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-
         } else {
-            defaultFilm.put("title",title);
-            defaultFilm.put("year",yearStr);
-            defaultFilm.put("genre",String.valueOf(reqGender));
+            defaultFilm.put("title", title);
+            defaultFilm.put("year", yearStr);
+            defaultFilm.put("genre", String.valueOf(reqGender));
             request.setAttribute(CustomTags.ERRORS, errors);
             request.setAttribute(CustomTags.FILM, defaultFilm);
-           doGet(request,response);
+            doGet(request, response);
             errors.clear();
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         List<Genre> genres;
-
-
-        GenreDAO genreDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getGenreDAO();
-        genres = genreDAO.findAll();
-        request.setAttribute(CustomTags.GENRES,genres);
+        FacadeService facadeService = FacadeServiceImpl.getInstance();
+        genres = facadeService.getGenres();
+        request.setAttribute(CustomTags.GENRES, genres);
         try {
-            request.getRequestDispatcher("AddFilm.jsp").forward(request,response);
+            request.getRequestDispatcher("AddFilm.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

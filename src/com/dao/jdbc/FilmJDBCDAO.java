@@ -27,8 +27,7 @@ public class FilmJDBCDAO implements FilmDAO {
     }
 
     @Override
-    public void insert(FilmDTO filmDTO) {
-        Film film = filmDTO.getFilm();
+    public void insert(Film film) {
         String insertFilmQuery = "INSERT INTO film " +
                 "(title,genre,year,director,cast,duration,description) VALUES" +
                 "(?," + //title
@@ -38,6 +37,7 @@ public class FilmJDBCDAO implements FilmDAO {
                 "?," +  //cast
                 "?," +  //duration
                 "?)";  //description
+
 
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertFilmQuery)) {
@@ -55,9 +55,8 @@ public class FilmJDBCDAO implements FilmDAO {
     }
 
     @Override
-    public void update(FilmDTO filmDTO) {
-        Film film = filmDTO.getFilm();
-        System.out.println("NEW TITLE: "+film.getTitle()+" NEW ID: "+film.getId());
+    public void update(Film film) {
+
         String updateFilmQuery = "UPDATE film SET title = ?, genre = ?, year = ?, director = ?, cast = ?, duration = ?, description = ? WHERE id = ?";
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateFilmQuery)) {
@@ -78,8 +77,7 @@ public class FilmJDBCDAO implements FilmDAO {
     }
 
     @Override
-    public void delete(FilmDTO filmDTO) {
-        Film film = filmDTO.getFilm();
+    public void delete(Film film) {
         String deleteFilmQuery = "DELETE FROM film WHERE id=?";
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(deleteFilmQuery)) {
@@ -91,7 +89,7 @@ public class FilmJDBCDAO implements FilmDAO {
     }
 
     @Override
-    public FilmDTO findById(int filmId) {
+    public Film findById(int filmId) {
         try (
                 Connection connection = JDBCDAOFactory.getConnection();
                 PreparedStatement ps = createPreparedStatement(connection, filmId);
@@ -108,10 +106,9 @@ public class FilmJDBCDAO implements FilmDAO {
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
 
                 Film film = new Film(title, genre, year, director, cast, description, duration, date);
-                FilmDTO filmDTO = new FilmDTO(film);
                 film.setId(id);
                 System.out.println("ID: "+film.getId());
-                return filmDTO;
+                return film;
             }
 
         } catch (SQLException e) {
@@ -122,12 +119,12 @@ public class FilmJDBCDAO implements FilmDAO {
     }
 
     @Override
-    public List<FilmDTO> findAll() {
+    public List<Film> findAll() {
         String findAllQuery = "SELECT * FROM film";
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(findAllQuery);
              ResultSet rs = ps.executeQuery()) {
-            List<FilmDTO> films = new ArrayList<>();
+            List<Film> films = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
@@ -140,9 +137,8 @@ public class FilmJDBCDAO implements FilmDAO {
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
 
                 Film film = new Film(title, genre, year, director, cast, description, duration, date);
-                FilmDTO filmDTO = new FilmDTO(film);
                 film.setId(id);
-                films.add(filmDTO);
+                films.add(film);
             }
 
             return films;

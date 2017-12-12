@@ -4,9 +4,9 @@ import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
 import com.dao.dto.FilmDTO;
-import com.dao.memory.FilmMemoryDAO;
+import com.facade.FacadeService;
+import com.facade.FacadeServiceImpl;
 import com.videoondemand.model.Film;
-import com.videoondemand.model.Genre;
 import com.videoondemand.utils.CustomTags;
 
 import javax.servlet.ServletException;
@@ -24,16 +24,15 @@ import java.util.List;
 public class FilmListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FilmDAO filmDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getFilmDAO();
-        List<FilmDTO> filmDTOS = filmDAO.findAll();
 
-        GenreDAO genreDAO = FactoryDAO.getDAOFactory(FactoryDAO.TypeDAOFactory.DB).getGenreDAO();
-
-        for (FilmDTO film : filmDTOS) {
-            film.setGenre(genreDAO.findById(film.getFilm().getGenre()));
+        FacadeService facadeService = FacadeServiceImpl.getInstance();
+        List<FilmDTO> films = facadeService.getFilms();
+        for(FilmDTO film: films){
+            System.out.println("GENRE ID: "+film.genreId);
+            film.setGenre(facadeService.getGenres().get(film.genreId-1));
         }
 
-        request.setAttribute(CustomTags.FILM_LIST, filmDTOS);
+        request.setAttribute(CustomTags.FILM_LIST, films);
         request.getRequestDispatcher("FilmList.jsp").forward(request, response);
     }
 

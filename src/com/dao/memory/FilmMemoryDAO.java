@@ -22,28 +22,28 @@ public class FilmMemoryDAO implements FilmDAO {
     }
 
     @Override
-    public void insert(FilmDTO film) {
+    public void insert(Film film) {
         Database.getFilms().add(film);
 
     }
 
     @Override
-    public void update(FilmDTO film) {
+    public void update(Film film) {
 
     }
 
     @Override
-    public void delete(FilmDTO film) {
+    public void delete(Film film) {
 
     }
 
     @Override
-    public FilmDTO findById(int id) {
+    public Film findById(int id) {
         return null;
     }
 
     @Override
-    public List<FilmDTO> findAll() {
+    public List<Film> findAll() {
         return Database.getFilms();
     }
 }

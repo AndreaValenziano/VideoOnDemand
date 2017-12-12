@@ -15,8 +15,8 @@ public class Database {
             new Film("The Godfather", 0, 1972),
             new Film("The Lord of the Rings: The Fellowship of the Ring", 0, 2001)));
 
-    public static List<FilmDTO> getFilms() {
-        return null; //must return filmDTO
+    public static List<Film> getFilms() {
+        return null; //must return film
     }
 }
 
