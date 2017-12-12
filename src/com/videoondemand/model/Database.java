@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class Database {
     private static ArrayList<Film> films = new ArrayList<>(Arrays.asList(
-            new Film("Inception", 0, 2010),
-            new Film("The Godfather", 0, 1972),
-            new Film("The Lord of the Rings: The Fellowship of the Ring", 0, 2001)));
+            new Film("Inception", 0, 2010,null),
+            new Film("The Godfather", 0, 1972,null),
+            new Film("The Lord of the Rings: The Fellowship of the Ring", 0, 2001,null)));
 
     public static List<Film> getFilms() {
         return null; //must return film

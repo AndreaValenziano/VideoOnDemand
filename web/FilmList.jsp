@@ -55,7 +55,7 @@
                             </td>
                             <td><%= film.releaseYear %>
                             </td>
-                            <td style="text-align: center;"><a class="btn" href="UpdateFilm?id=<%= film.id %>"><i class="fa fa-pencil-square-o"
+                            <td style="text-align: center;"><a class="btn" href="FormAddFilmServlet?id=<%= film.id %>&action=edit"><i class="fa fa-pencil-square-o"
                                                                                        aria-hidden="true"></i></a>
                                 <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
                                         class="fa fa-trash"

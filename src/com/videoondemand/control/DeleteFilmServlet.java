@@ -22,7 +22,7 @@ public class DeleteFilmServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       int id =0 ;
+       int id ;
        try {
            id = Integer.parseInt(request.getParameter("id"));
        }catch (Exception e){

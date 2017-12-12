@@ -11,27 +11,33 @@ import com.videoondemand.model.Genre;
 import com.videoondemand.utils.CustomTags;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.Part;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by AndreaValenziano on 28/11/17.
  */
 @WebServlet("/FormAddFilmServlet")
+@MultipartConfig
 public class FormAddFilmServlet extends HttpServlet {
     private static final String YEAR_ERROR = "Invalid year";
     private static final String YEAR_RANGE_ERROR = "The year must be between 1920 and ";
     private static final String TITLE_ERROR = "Title length is shorter than 2 character";
 
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        setPageValues(request);
+
         List<String> errors = new ArrayList<>();
         HashMap<String, String> defaultFilm = new HashMap<>();
         defaultFilm.put("title", "");
@@ -43,6 +49,7 @@ public class FormAddFilmServlet extends HttpServlet {
         String title = request.getParameter("title");
         title = title != null ? title.trim() : "";
 
+        int id = Integer.parseInt(request.getParameter("id"));
 
         String yearStr = request.getParameter("year");
         yearStr = yearStr != null ? yearStr.trim() : "";
@@ -74,13 +81,19 @@ public class FormAddFilmServlet extends HttpServlet {
 
         if (errors.isEmpty()) {
 
-
             FacadeService facadeService = FacadeServiceImpl.getInstance();
             FilmDTO filmDTO = new FilmDTO();
+            filmDTO.id = id;
             filmDTO.title = title;
             filmDTO.releaseYear = year;
             filmDTO.genreId = reqGender;
-            facadeService.insert(filmDTO);
+            filmDTO.coverName = getFileCover(request);
+            if (request.getParameter("action").equals("create")) {
+                facadeService.insert(filmDTO);
+            } else if (request.getParameter("action").equals("edit")) {
+                facadeService.update(filmDTO);
+            }
+
 
             try {
                 response.sendRedirect("FilmListServlet");
@@ -100,6 +113,9 @@ public class FormAddFilmServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+        setPageValues(request);
+
         List<Genre> genres;
         FacadeService facadeService = FacadeServiceImpl.getInstance();
         genres = facadeService.getGenres();
@@ -110,5 +126,80 @@ public class FormAddFilmServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+    }
+
+    private void setPageValues(HttpServletRequest request) {
+        String action = request.getParameter("action");
+        String headerTitle = action.equals("create") ? "Create new Film" : "Update Film";
+        String buttonName = action.equals("create") ? "Add Film" : "Update";
+
+        Map<String, String> actionValues = new HashMap<>();
+        actionValues.put("act", action);
+        actionValues.put("headerTitle", headerTitle);
+        actionValues.put("buttonName", buttonName);
+
+        request.setAttribute("values", actionValues);
+
+        if (action.equals("edit")) {
+            List<Genre> genres;
+            int id = 0;
+            if (request.getParameter("id") != null) {
+                try {
+                    id = Integer.parseInt(request.getParameter("id"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    id = 0;
+                }
+                FilmDTO filmDTO;
+                FacadeService facadeService = FacadeServiceImpl.getInstance();
+                try {
+
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    System.out.println("Film Not Found");
+                }
+                filmDTO = facadeService.findById(id);
+                request.setAttribute(CustomTags.FILM, filmDTO);
+
+            }
+
+            FacadeService facadeService = FacadeServiceImpl.getInstance();
+            genres = facadeService.getGenres();
+
+            request.setAttribute(CustomTags.GENRES, genres);
+            request.setAttribute(CustomTags.ID, id);
+        }
+    }
+
+
+    private String getFileCover(HttpServletRequest request) throws IOException, ServletException {
+        final String PATH = "/Users/AndreaValenziano/videoondemand_covers/";
+        final Part FILE_PART = request.getPart("film_cover");
+        final String FILE_NAME = getFileName(FILE_PART);
+        try (FileOutputStream out = new FileOutputStream(new File(PATH + File.pathSeparator + FILE_NAME));
+             InputStream fileContent = FILE_PART.getInputStream()) {
+
+            int read;
+            final byte[] bytes = new byte[1024];
+            while ((read = fileContent.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return FILE_NAME;
+
+    }
+
+
+    private String getFileName(final Part PART) {
+        for (String content : PART.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf("=") + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
     }
 }

@@ -29,14 +29,15 @@ public class FilmJDBCDAO implements FilmDAO {
     @Override
     public void insert(Film film) {
         String insertFilmQuery = "INSERT INTO film " +
-                "(title,genre,year,director,cast,duration,description) VALUES" +
+                "(title,genre,year,director,cast,duration,description,file_cover_name) VALUES" +
                 "(?," + //title
                 "?," +  //genre
                 "?," +  //year
                 "?," +  //director
                 "?," +  //cast
                 "?," +  //duration
-                "?)";  //description
+                "?," +  //description
+                "?)";   //covername
 
 
         try (Connection connection = JDBCDAOFactory.getConnection();
@@ -48,6 +49,7 @@ public class FilmJDBCDAO implements FilmDAO {
             preparedStatement.setString(5, film.getCast());
             preparedStatement.setInt(6, film.getDuration());
             preparedStatement.setString(7, film.getDescription());
+            preparedStatement.setString(8,film.getCoverName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,7 +59,7 @@ public class FilmJDBCDAO implements FilmDAO {
     @Override
     public void update(Film film) {
 
-        String updateFilmQuery = "UPDATE film SET title = ?, genre = ?, year = ?, director = ?, cast = ?, duration = ?, description = ? WHERE id = ?";
+        String updateFilmQuery = "UPDATE film SET title = ?, genre = ?, year = ?, director = ?, cast = ?, duration = ?, description = ?, file_cover_name = ? WHERE id = ?";
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateFilmQuery)) {
             preparedStatement.setString(1, film.getTitle());
@@ -67,7 +69,8 @@ public class FilmJDBCDAO implements FilmDAO {
             preparedStatement.setString(5, film.getCast());
             preparedStatement.setInt(6, film.getDuration());
             preparedStatement.setString(7, film.getDescription());
-            preparedStatement.setInt(8, film.getId());
+            preparedStatement.setString(8,film.getCoverName());
+            preparedStatement.setInt(9, film.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,8 +107,8 @@ public class FilmJDBCDAO implements FilmDAO {
                 int duration = rs.getInt("duration");
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
-
-                Film film = new Film(title, genre, year, director, cast, description, duration, date);
+                String coverName = rs.getString("file_cover_name");
+                Film film = new Film(title, genre, year, director, cast, description, duration, date,coverName);
                 film.setId(id);
                 System.out.println("ID: "+film.getId());
                 return film;
@@ -135,8 +138,9 @@ public class FilmJDBCDAO implements FilmDAO {
                 int duration = rs.getInt("duration");
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
+                String coverName = rs.getString("file_cover_name");
 
-                Film film = new Film(title, genre, year, director, cast, description, duration, date);
+                Film film = new Film(title, genre, year, director, cast, description, duration, date,coverName );
                 film.setId(id);
                 films.add(film);
             }

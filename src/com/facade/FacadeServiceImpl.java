@@ -8,6 +8,7 @@ import com.dao.dto.FilmDTO;
 import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 
+
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class FacadeServiceImpl implements FacadeService {
     private static FacadeServiceImpl instance;
 
     public static FacadeServiceImpl getInstance() {
+
         if (instance == null) {
             instance = new FacadeServiceImpl();
         }
@@ -68,8 +70,8 @@ public class FacadeServiceImpl implements FacadeService {
 
 
     @Override
-    public FilmDTO createFilmDTO(String title, int reqGender, int year) {
-        Film film = new Film(title,reqGender,year);
+    public FilmDTO createFilmDTO(String title, int reqGender, int year, String coverName) {
+        Film film = new Film(title,reqGender,year, coverName);
         return DTOAssembler.getFilmDTO(film);
     }
 }

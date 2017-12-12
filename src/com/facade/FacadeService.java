@@ -20,5 +20,5 @@ public interface FacadeService {
 
     void delete(FilmDTO film);
 
-    FilmDTO createFilmDTO(String title, int reqGender, int year);
+    FilmDTO createFilmDTO(String title, int reqGender, int year, String coverName);
 }

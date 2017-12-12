@@ -19,6 +19,7 @@ public class FilmDTO  {
     public String director, cast, description;
     public int duration;
     public LocalDate creationDate;
+    public String coverName;
 
 
     public FilmDTO(){}
@@ -26,6 +27,17 @@ public class FilmDTO  {
 
     public FilmDTO(Film film) {
         this.film = film;
+        this.title = film.getTitle();
+        this.id = film.getId();
+        this.genreId = film.getGenre();
+        this.releaseYear = film.getReleaseYear();
+        this.cast= film.getCast();
+        this.description = film.getDescription();
+        this.director = film.getDirector();
+        this.duration = film.getDuration();
+        this.creationDate = film.getCreationDate();
+        this.coverName = film.getCoverName();
+
     }
 
     public Genre getGenre() {

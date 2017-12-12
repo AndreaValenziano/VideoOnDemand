@@ -10,8 +10,9 @@ public class Film {
     private String director, cast, description;
     private int duration;
     private LocalDate creationDate;
+    private String coverName;
 
-    public Film(String title, int genre, int releaseYear, String director, String cast, String description, int duration, LocalDate creationDate) {
+    public Film(String title, int genre, int releaseYear, String director, String cast, String description, int duration, LocalDate creationDate, String coverName) {
         this.title = title;
         this.genre = genre;
         this.releaseYear = releaseYear;
@@ -20,13 +21,15 @@ public class Film {
         this.description = description;
         this.duration = duration;
         this.creationDate = creationDate;
+        this.coverName = coverName;
     }
 
 
-    public Film(String title, int genre, int releaseYear) {
+    public Film(String title, int genre, int releaseYear, String coverName) {
         this.title = title;
         this.genre = genre;
         this.releaseYear = releaseYear;
+        this.coverName = coverName;
         this.creationDate = LocalDate.now();
     }
 
@@ -100,5 +103,9 @@ public class Film {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getCoverName() {
+        return coverName;
     }
 }
