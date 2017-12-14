@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
@@ -152,12 +155,6 @@ public class FormAddFilmServlet extends HttpServlet {
                 }
                 FilmDTO filmDTO;
                 FacadeService facadeService = FacadeServiceImpl.getInstance();
-                try {
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    System.out.println("Film Not Found");
-                }
                 filmDTO = facadeService.findById(id);
                 request.setAttribute(CustomTags.FILM, filmDTO);
 
@@ -173,10 +170,12 @@ public class FormAddFilmServlet extends HttpServlet {
 
 
     private String getFileCover(HttpServletRequest request) throws IOException, ServletException {
-        final String PATH = "/Users/AndreaValenziano/videoondemand_covers/";
+        final String PATH="/Applications/XAMPP/xamppfiles/htdocs/img";
         final Part FILE_PART = request.getPart("film_cover");
         final String FILE_NAME = getFileName(FILE_PART);
-        try (FileOutputStream out = new FileOutputStream(new File(PATH + File.pathSeparator + FILE_NAME));
+        File img = new File(PATH+"/"+FILE_NAME);
+        img.setReadable(true,false);
+        try (FileOutputStream out = new FileOutputStream(img);
              InputStream fileContent = FILE_PART.getInputStream()) {
 
             int read;
@@ -184,13 +183,10 @@ public class FormAddFilmServlet extends HttpServlet {
             while ((read = fileContent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return FILE_NAME;
-
     }
 
 

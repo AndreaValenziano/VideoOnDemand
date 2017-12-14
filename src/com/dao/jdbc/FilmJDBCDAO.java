@@ -93,6 +93,7 @@ public class FilmJDBCDAO implements FilmDAO {
 
     @Override
     public Film findById(int filmId) {
+        final String PATH = "http://localhost/img/";
         try (
                 Connection connection = JDBCDAOFactory.getConnection();
                 PreparedStatement ps = createPreparedStatement(connection, filmId);
@@ -108,9 +109,8 @@ public class FilmJDBCDAO implements FilmDAO {
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
                 String coverName = rs.getString("file_cover_name");
-                Film film = new Film(title, genre, year, director, cast, description, duration, date,coverName);
+                Film film = new Film(title, genre, year, director, cast, description, duration, date,PATH+coverName);
                 film.setId(id);
-                System.out.println("ID: "+film.getId());
                 return film;
             }
 
@@ -123,6 +123,7 @@ public class FilmJDBCDAO implements FilmDAO {
 
     @Override
     public List<Film> findAll() {
+        final String PATH = "http://localhost/img/";
         String findAllQuery = "SELECT * FROM film";
         try (Connection connection = JDBCDAOFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(findAllQuery);
@@ -140,7 +141,7 @@ public class FilmJDBCDAO implements FilmDAO {
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
                 String coverName = rs.getString("file_cover_name");
 
-                Film film = new Film(title, genre, year, director, cast, description, duration, date,coverName );
+                Film film = new Film(title, genre, year, director, cast, description, duration, date,PATH+coverName );
                 film.setId(id);
                 films.add(film);
             }

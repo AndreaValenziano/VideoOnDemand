@@ -17,7 +17,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Film List</h1>
+            <h1 class="page-header">Film Gallery</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -27,7 +27,33 @@
             <div class="panel panel-default">
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <% for (FilmDTO film : filmList) {%>
+
+                    <div class="col-md-4">
+                        <div class="thumbnail">
+                            <a href="<%= film.coverName %>">
+                                <img src="<%= film.coverName%>" onerror="imgError(this);" style="width:100%" >
+                            </a>
+                            <div class="caption">
+                                <p id="title"><%= film.title%>
+                                </p>
+                                <p id="year"><%= film.releaseYear%>
+                                </p>
+                                <p id="genre"><%= film.getGenre().getName()%>
+                                </p>
+                                <a class="btn" href="FormAddFilmServlet?id=<%= film.id %>&action=edit"><i
+                                        class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></a>
+                                <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
+                                        class="fa fa-trash"
+                                        aria-hidden="true"></i></a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <%}%>
+
+                    <%--<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                         <thead>
                         <tr>
                             <th>Title</th>
@@ -60,7 +86,7 @@
                                 Vedi cover <!--TODO: Mostrare immagine presa dal db -->
                             </td>
                             <td style="text-align: center;"><a class="btn" href="FormAddFilmServlet?id=<%= film.id %>&action=edit"><i class="fa fa-pencil-square-o"
-                                                                                       aria-hidden="true"></i></a>
+                                                                                                                                      aria-hidden="true"></i></a>
                                 <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
                                         class="fa fa-trash"
                                         aria-hidden="true"></i></a></td>
@@ -71,7 +97,7 @@
 
                         </tbody>
                     </table>
-                    <!-- /.table-responsive -->
+                    <!-- /.table-responsive -->--%>
 
                 </div>
                 <!-- /.panel-body -->
@@ -84,4 +110,6 @@
 
 </div>
 <!-- /#page-wrapper -->
+
+
 

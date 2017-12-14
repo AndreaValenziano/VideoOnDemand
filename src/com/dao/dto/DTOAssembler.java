@@ -4,6 +4,7 @@ import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public class DTOAssembler {
         for (Film film : films) {
             filmsDTO.add(createFilmDTO(film, genres.get(film.getGenre() - 1)));
         }
+
+
         return filmsDTO;
     }
 
@@ -28,6 +31,7 @@ public class DTOAssembler {
         filmDTO.id = film.getId();
         filmDTO.setGenre(genre);
         filmDTO.genreId = genre.getId();
+        filmDTO.coverName = film.getCoverName();
         return filmDTO;
     }
 
@@ -43,6 +47,9 @@ public class DTOAssembler {
         film.setId(filmDTO.id);
         return film;
     }
+
+
+
 
 
 }

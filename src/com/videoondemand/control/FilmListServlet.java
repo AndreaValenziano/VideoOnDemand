@@ -28,12 +28,11 @@ public class FilmListServlet extends HttpServlet {
         FacadeService facadeService = FacadeServiceImpl.getInstance();
         List<FilmDTO> films = facadeService.getFilms();
         for(FilmDTO film: films){
-            System.out.println("GENRE ID: "+film.genreId);
             film.setGenre(facadeService.getGenres().get(film.genreId-1));
         }
 
         request.setAttribute(CustomTags.FILM_LIST, films);
-        request.getRequestDispatcher("FilmList.jsp").forward(request, response);
+        request.getRequestDispatcher("Gallery.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

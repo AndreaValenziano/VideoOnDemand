@@ -4,6 +4,8 @@ import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by AndreaValenziano on 05/12/17.
@@ -20,7 +22,7 @@ public class FilmDTO  {
     public int duration;
     public LocalDate creationDate;
     public String coverName;
-
+    public Map<Integer,String>  genresMap = new HashMap<>();
 
     public FilmDTO(){}
 
