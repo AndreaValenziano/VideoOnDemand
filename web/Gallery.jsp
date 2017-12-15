@@ -41,10 +41,10 @@
                                 </p>
                                 <p id="genre"><%= film.getGenre().getName()%>
                                 </p>
-                                <a class="btn" href="FormAddFilmServlet?id=<%= film.id %>&action=edit"><i
+                                <a class="btn" href="FilmController?id=<%= film.id %>&action=edit"><i
                                         class="fa fa-pencil-square-o"
                                         aria-hidden="true"></i></a>
-                                <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
+                                <a class="btn" href="DeleteFilm?action=delete&id=<%= film.id %>"><i
                                         class="fa fa-trash"
                                         aria-hidden="true"></i></a>
                             </div>
@@ -85,7 +85,7 @@
                             <td>
                                 Vedi cover <!--TODO: Mostrare immagine presa dal db -->
                             </td>
-                            <td style="text-align: center;"><a class="btn" href="FormAddFilmServlet?id=<%= film.id %>&action=edit"><i class="fa fa-pencil-square-o"
+                            <td style="text-align: center;"><a class="btn" href="FilmControllerServlet?id=<%= film.id %>&action=edit"><i class="fa fa-pencil-square-o"
                                                                                                                                       aria-hidden="true"></i></a>
                                 <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
                                         class="fa fa-trash"

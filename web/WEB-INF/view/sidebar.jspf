@@ -6,7 +6,7 @@
                 <a href="../../index.jsp"><i class="fa fa-home fa-fw"></i> Home</a>
             </li>
             <li>
-                <a href="FormAddFilmServlet?action=create"><i class="fa fa-plus fa-fw"></i> Add Film</a>
+                <a href="FilmController?action=create"><i class="fa fa-plus fa-fw"></i> Add Film</a>
 
             </li>
             <li>

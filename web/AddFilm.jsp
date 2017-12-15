@@ -22,7 +22,7 @@
 <%
     String title = "", year = "";
     int genre = 0, id = 0;
-    List<Genre> genres = new ArrayList<>();
+    List<Genre> genres;
     genres = (List<Genre>) request.getAttribute(CustomTags.GENRES);
     FilmDTO film;
     Map<String, String> values = (Map<String, String>) request.getAttribute("values");
@@ -38,14 +38,6 @@
             year = String.valueOf(film.releaseYear);
             id = (film.id);
             genre = film.genreId;
-            headerTitle = "Update Film";
-            buttonName = "Update";
-        } else if (request.getParameter("action").toLowerCase().equals("create")) {
-            film = (FilmDTO) request.getAttribute(CustomTags.FILM);
-            title = film.title;
-            year = String.valueOf(film.releaseYear);
-            headerTitle = "Create new Film";
-            buttonName = "Add Film ";
         }
     } else if (request.getAttribute(CustomTags.FILM) instanceof HashMap) {
         HashMap<String, String> defaultFilm = (HashMap<String, String>) request.getAttribute(CustomTags.FILM);
@@ -53,16 +45,8 @@
         title = title != null ? title.trim() : "";
         genre = Integer.parseInt(defaultFilm.get("genre"));
         year = defaultFilm.get("year");
-        if (request.getParameter("action").toLowerCase().equals("edit")) {
-            headerTitle = "Update Film";
-            buttonName = "Update";
-        } else {
-            headerTitle = "Create new Film";
-            buttonName = "Add Film ";
-        }
 
     }
-
 
 %>
 <div id="page-wrapper">

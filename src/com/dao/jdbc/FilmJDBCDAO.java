@@ -49,7 +49,7 @@ public class FilmJDBCDAO implements FilmDAO {
             preparedStatement.setString(5, film.getCast());
             preparedStatement.setInt(6, film.getDuration());
             preparedStatement.setString(7, film.getDescription());
-            preparedStatement.setString(8,film.getCoverName());
+            preparedStatement.setString(8, film.getCoverName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,7 +69,11 @@ public class FilmJDBCDAO implements FilmDAO {
             preparedStatement.setString(5, film.getCast());
             preparedStatement.setInt(6, film.getDuration());
             preparedStatement.setString(7, film.getDescription());
-            preparedStatement.setString(8,film.getCoverName());
+            if (!film.getCoverName().equals("")) {
+                preparedStatement.setString(8, film.getCoverName());
+            }else{
+                preparedStatement.setString(8,"");
+            }
             preparedStatement.setInt(9, film.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -109,7 +113,7 @@ public class FilmJDBCDAO implements FilmDAO {
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
                 String coverName = rs.getString("file_cover_name");
-                Film film = new Film(title, genre, year, director, cast, description, duration, date,PATH+coverName);
+                Film film = new Film(title, genre, year, director, cast, description, duration, date, PATH + coverName);
                 film.setId(id);
                 return film;
             }
@@ -141,7 +145,7 @@ public class FilmJDBCDAO implements FilmDAO {
                 LocalDate date = rs.getDate("creation_date").toLocalDate();
                 String coverName = rs.getString("file_cover_name");
 
-                Film film = new Film(title, genre, year, director, cast, description, duration, date,PATH+coverName );
+                Film film = new Film(title, genre, year, director, cast, description, duration, date, PATH + coverName);
                 film.setId(id);
                 films.add(film);
             }

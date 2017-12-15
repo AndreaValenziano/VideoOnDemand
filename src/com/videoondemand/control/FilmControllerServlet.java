@@ -29,9 +29,9 @@ import java.util.*;
 /**
  * Created by AndreaValenziano on 28/11/17.
  */
-@WebServlet("/FormAddFilmServlet")
+@WebServlet("/FilmController")
 @MultipartConfig
-public class FormAddFilmServlet extends HttpServlet {
+public class FilmControllerServlet extends HttpServlet {
     private static final String YEAR_ERROR = "Invalid year";
     private static final String YEAR_RANGE_ERROR = "The year must be between 1920 and ";
     private static final String TITLE_ERROR = "Title length is shorter than 2 character";
@@ -115,10 +115,10 @@ public class FormAddFilmServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 
         setPageValues(request);
-
         List<Genre> genres;
         FacadeService facadeService = FacadeServiceImpl.getInstance();
         genres = facadeService.getGenres();
@@ -198,4 +198,7 @@ public class FormAddFilmServlet extends HttpServlet {
         }
         return null;
     }
+
+
+
 }
