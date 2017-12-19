@@ -3,6 +3,7 @@ package com.dao.memory;
 import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
+import com.dao.UserDAO;
 
 /**
  * Created by AndreaValenziano on 28/11/17.
@@ -30,5 +31,10 @@ public class MemoryDAOFactory implements FactoryDAO {
     @Override
     public GenreDAO getGenreDAO() {
         return null; //create GenreMemoryDAO
+    }
+
+    @Override
+    public UserDAO getUserDAO() {
+        return null;
     }
 }

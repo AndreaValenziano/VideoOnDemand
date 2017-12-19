@@ -1,12 +1,8 @@
 package com.videoondemand.control;
 
-import com.dao.FactoryDAO;
-import com.dao.FilmDAO;
-import com.dao.GenreDAO;
 import com.dao.dto.FilmDTO;
 import com.facade.FacadeService;
 import com.facade.FacadeServiceImpl;
-import com.videoondemand.model.Film;
 import com.videoondemand.utils.CustomTags;
 
 import javax.servlet.ServletException;

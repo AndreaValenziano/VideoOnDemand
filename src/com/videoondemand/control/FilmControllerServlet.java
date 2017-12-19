@@ -1,12 +1,8 @@
 package com.videoondemand.control;
 
-import com.dao.FactoryDAO;
-import com.dao.FilmDAO;
-import com.dao.GenreDAO;
 import com.dao.dto.FilmDTO;
 import com.facade.FacadeService;
 import com.facade.FacadeServiceImpl;
-import com.videoondemand.model.Film;
 import com.videoondemand.model.Genre;
 import com.videoondemand.utils.CustomTags;
 
@@ -18,11 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -39,7 +30,16 @@ public class FilmControllerServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        setPageValues(request);
+
+
+        String action = request.getParameter("action");
+        if(action.equals("delete")){
+            response.sendRedirect("FilmListServlet");
+            return;
+        }
+
+
+        setPageValues(request, request.getParameter("action"));
 
         List<String> errors = new ArrayList<>();
         HashMap<String, String> defaultFilm = new HashMap<>();
@@ -115,14 +115,43 @@ public class FilmControllerServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-
-        setPageValues(request);
-        List<Genre> genres;
+        String action = request.getParameter("action");
         FacadeService facadeService = FacadeServiceImpl.getInstance();
-        genres = facadeService.getGenres();
-        request.setAttribute(CustomTags.GENRES, genres);
+
+        int id;
+        if (request.getParameter("id") != null) {
+            try {
+                id = Integer.parseInt(request.getParameter("id"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                id = 0;
+            }
+
+            if (action.equals("create")) {
+
+            } else if (action.equals("edit")) {
+                FilmDTO filmDTO;
+                filmDTO = facadeService.findFilmById(id);
+                request.setAttribute(CustomTags.FILM, filmDTO);
+                request.setAttribute(CustomTags.ID, id);
+            } else if (action.equals("delete")) {
+                System.out.println("ID TO DELETE: " + facadeService.findFilmById(id));
+                try {
+                    facadeService.delete(facadeService.findFilmById(id));
+                    doPost(request,response);
+                    return;
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    System.out.println("Film not found");
+                }
+            }
+
+        }
+
+        setPageValues(request, action);
+
         try {
             request.getRequestDispatcher("AddFilm.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -131,8 +160,8 @@ public class FilmControllerServlet extends HttpServlet {
 
     }
 
-    private void setPageValues(HttpServletRequest request) {
-        String action = request.getParameter("action");
+    private void setPageValues(HttpServletRequest request, String action) {
+
         String headerTitle = action.equals("create") ? "Create new Film" : "Update Film";
         String buttonName = action.equals("create") ? "Add Film" : "Update";
 
@@ -141,40 +170,22 @@ public class FilmControllerServlet extends HttpServlet {
         actionValues.put("headerTitle", headerTitle);
         actionValues.put("buttonName", buttonName);
 
+
         request.setAttribute("values", actionValues);
+        FacadeService facadeService = FacadeServiceImpl.getInstance();
+        List<Genre> genres = facadeService.getGenres();
+        request.setAttribute(CustomTags.GENRES, genres);
 
-        if (action.equals("edit")) {
-            List<Genre> genres;
-            int id = 0;
-            if (request.getParameter("id") != null) {
-                try {
-                    id = Integer.parseInt(request.getParameter("id"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    id = 0;
-                }
-                FilmDTO filmDTO;
-                FacadeService facadeService = FacadeServiceImpl.getInstance();
-                filmDTO = facadeService.findById(id);
-                request.setAttribute(CustomTags.FILM, filmDTO);
-
-            }
-
-            FacadeService facadeService = FacadeServiceImpl.getInstance();
-            genres = facadeService.getGenres();
-
-            request.setAttribute(CustomTags.GENRES, genres);
-            request.setAttribute(CustomTags.ID, id);
-        }
     }
 
 
     private String getFileCover(HttpServletRequest request) throws IOException, ServletException {
-        final String PATH="/Applications/XAMPP/xamppfiles/htdocs/img";
+        final String PATH = "/Applications/XAMPP/xamppfiles/htdocs/img";
         final Part FILE_PART = request.getPart("film_cover");
         final String FILE_NAME = getFileName(FILE_PART);
-        File img = new File(PATH+"/"+FILE_NAME);
-        img.setReadable(true,false);
+        File img = new File(PATH + "/" + FILE_NAME);
+        img.setExecutable(true,false);
+        img.setReadable(true, false);
         try (FileOutputStream out = new FileOutputStream(img);
              InputStream fileContent = FILE_PART.getInputStream()) {
 
@@ -198,7 +209,6 @@ public class FilmControllerServlet extends HttpServlet {
         }
         return null;
     }
-
 
 
 }

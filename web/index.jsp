@@ -3,7 +3,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ include file="./WEB-INF/view/sidebar.jspf" %>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">

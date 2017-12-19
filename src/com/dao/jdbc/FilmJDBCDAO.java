@@ -71,8 +71,6 @@ public class FilmJDBCDAO implements FilmDAO {
             preparedStatement.setString(7, film.getDescription());
             if (!film.getCoverName().equals("")) {
                 preparedStatement.setString(8, film.getCoverName());
-            }else{
-                preparedStatement.setString(8,"");
             }
             preparedStatement.setInt(9, film.getId());
             preparedStatement.executeUpdate();

@@ -10,7 +10,7 @@
   Time: 10:22 AM
   To change this template use File | Settings | File Templates.
 --%>
-
+<%@ include file="./WEB-INF/view/sidebar.jspf" %>
 <%
     List<FilmDTO> filmList = (List<FilmDTO>) request.getAttribute(CustomTags.FILM_LIST);
 %>
@@ -44,7 +44,7 @@
                                 <a class="btn" href="FilmController?id=<%= film.id %>&action=edit"><i
                                         class="fa fa-pencil-square-o"
                                         aria-hidden="true"></i></a>
-                                <a class="btn" href="DeleteFilm?action=delete&id=<%= film.id %>"><i
+                                <a class="btn" href="FilmController?action=delete&id=<%= film.id %>"><i
                                         class="fa fa-trash"
                                         aria-hidden="true"></i></a>
                             </div>
@@ -52,52 +52,6 @@
                         </div>
                     </div>
                     <%}%>
-
-                    <%--<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Gender</th>
-                            <th>Year</th>
-                            <th>Cover</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        <% int i = 0;
-                            String trClass = "odd gradeA";
-                            for (FilmDTO film : filmList) {
-                                if (film != null) {
-                                    if (i % 2 == 0) {
-                                        trClass = "odd gradeA";
-                                    } else {
-                                        trClass = "even gradeC";
-                                    }
-                        %>
-                        <tr class="<%= trClass %>">
-                            <td><%= film.title %>
-                            </td>
-                            <td><%= film.getGenre().getName() %>
-                            </td>
-                            <td><%= film.releaseYear %>
-                            </td>
-                            <td>
-                                Vedi cover <!--TODO: Mostrare immagine presa dal db -->
-                            </td>
-                            <td style="text-align: center;"><a class="btn" href="FilmControllerServlet?id=<%= film.id %>&action=edit"><i class="fa fa-pencil-square-o"
-                                                                                                                                      aria-hidden="true"></i></a>
-                                <a class="btn" href="DeleteFilm?id=<%= film.id %>"><i
-                                        class="fa fa-trash"
-                                        aria-hidden="true"></i></a></td>
-                        </tr>
-                        <% i++;
-                        }
-                        } %>
-
-                        </tbody>
-                    </table>
-                    <!-- /.table-responsive -->--%>
 
                 </div>
                 <!-- /.panel-body -->
@@ -107,7 +61,6 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
-
 </div>
 <!-- /#page-wrapper -->
 

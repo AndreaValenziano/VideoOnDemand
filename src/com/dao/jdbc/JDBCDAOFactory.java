@@ -3,6 +3,7 @@ package com.dao.jdbc;
 import com.dao.FactoryDAO;
 import com.dao.FilmDAO;
 import com.dao.GenreDAO;
+import com.dao.UserDAO;
 
 
 import javax.naming.InitialContext;
@@ -39,6 +40,11 @@ public class JDBCDAOFactory implements FactoryDAO {
     @Override
     public GenreDAO getGenreDAO() {
         return GenreJDBCDAO.getInstance();
+    }
+
+    @Override
+    public UserDAO getUserDAO() {
+        return UserJDBCDAO.getInstance();
     }
 
     public static Connection getConnection() {

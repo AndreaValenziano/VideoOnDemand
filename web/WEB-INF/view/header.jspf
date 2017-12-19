@@ -1,3 +1,4 @@
+<%@ page import="com.dao.dto.UserDTO" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,5 +52,19 @@
                                                                       src="../../resources/images/popcorn.png">  Video On Demand</span></a>
         </div>
         <!-- /.navbar-header -->
-        <%@ include file="sidebar.jspf" %>
+
+
+            <%
+
+            String uri = request.getServletPath();
+            String pageName = uri.substring(uri.lastIndexOf("/")+1);
+            if(!pageName.equals("Login.jsp")){
+            if(request.getSession().getAttribute("user")==null){
+
+                response.sendRedirect("Login");
+                return;
+        }}%>
+
+
+
 

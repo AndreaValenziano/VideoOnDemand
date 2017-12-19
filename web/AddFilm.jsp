@@ -18,7 +18,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-
+<%@ include file="./WEB-INF/view/sidebar.jspf" %>
 <%
     String title = "", year = "";
     int genre = 0, id = 0;
@@ -45,9 +45,7 @@
         title = title != null ? title.trim() : "";
         genre = Integer.parseInt(defaultFilm.get("genre"));
         year = defaultFilm.get("year");
-
     }
-
 %>
 <div id="page-wrapper">
     <div class="row">
@@ -67,7 +65,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6">
-                            <form action="FormAddFilmServlet?action=<%= action %>" method="POST" enctype="multipart/form-data">
+                            <form action="FilmController?action=<%= action %>" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <input type="text" value='<%= id%>' name='id' hidden="true">
                                     <label>Title</label>

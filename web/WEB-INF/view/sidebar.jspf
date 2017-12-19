@@ -1,3 +1,12 @@
+
+
+<% UserDTO user = (UserDTO)request.getSession().getAttribute("user"); %>
+<ul class="nav navbar-top-links navbar-right">
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Benvenuto <%= user.username %>
+        </a></li>
+</ul>
 <!-- sidebar -->
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">

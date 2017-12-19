@@ -10,7 +10,7 @@
   Time: 10:22 AM
   To change this template use File | Settings | File Templates.
 --%>
-
+<%@ include file="./WEB-INF/view/sidebar.jspf" %>
 <%
     List<FilmDTO> filmList = (List<FilmDTO>) request.getAttribute(CustomTags.FILM_LIST);
 %>

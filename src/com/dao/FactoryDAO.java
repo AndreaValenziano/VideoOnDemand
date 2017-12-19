@@ -25,4 +25,5 @@ public interface FactoryDAO {
 
     FilmDAO getFilmDAO();
     GenreDAO getGenreDAO();
+    UserDAO getUserDAO();
 }
